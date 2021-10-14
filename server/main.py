@@ -1,13 +1,5 @@
 import socket 
 
-# while True:
-#     data=conn.recv(1024)
-#     if not data:
-#         print('Fechando conexão')
-#         conn.close()
-#         break
-#     conn.sendall(str.encode(str(data)))
-
 class server():
     HOST = 'localhost'
     PORT = 50000
