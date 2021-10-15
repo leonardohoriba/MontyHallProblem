@@ -86,7 +86,7 @@ def main():
         # WIN.blit(CAR, ((WIDTH - DOOR_WIDTH)/2 + 150, 50))
         # WIN.blit(GOAT, ((WIDTH - DOOR_WIDTH)/2 - 300, 130))
         # WIN.blit(GOAT, ((WIDTH - DOOR_WIDTH)/2 - 50, 130))
-        # WIN.blit(GOAT, ((WIDTH - DOOR_WIDTH)/2 + 200, 130))
+        WIN.blit(GOAT, ((WIDTH - DOOR_WIDTH)/2 + 200, 130))
 
 
         pygame.display.flip() 
