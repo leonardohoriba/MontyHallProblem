@@ -1,5 +1,4 @@
-import socket 
-
+import socket
 class server():
     HOST = 'localhost'
     PORT = 50000

@@ -22,6 +22,7 @@ GOAT = pygame.transform.scale(GOAT, (DOOR_HEIGHT, DOOR_WIDTH))
 def draw_window():
     WIN.fill(WHITE)
     WIN.blit(GOAT, (300, 100))
+    WIN.blit(CAR, (300, 100))
     pygame.display.update()
 
 def main():
@@ -41,3 +42,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+    
