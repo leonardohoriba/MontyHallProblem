@@ -1,5 +1,4 @@
 import socket
-import threading
 import time
 
 
@@ -7,12 +6,13 @@ import time
 class Server():
     conexoes = {}
     mensagens = []
-    #socket do tipo TCP socket.SOCK_STREAM
-    SERVER_IP = '127.0.14.1'
+    
+    SERVER_IP = '127.0.3.1'
     #socket.gethostbyname(socket.gethostname())
     PORT = 5050
     ADDR = (SERVER_IP, PORT)
     FORMATO = 'utf-8'
+    #socket do tipo TCP socket.SOCK_STREAM
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.bind(ADDR)
     conn,addr=False,False
@@ -24,8 +24,7 @@ class Server():
         self.server.listen()
         while (self.run):
             self.conn, self.addr = self.server.accept()
-            thread = threading.Thread(target=self.handle_clientes, args=(self.conn,self.addr))
-            thread.start()
+            self.handle_clientes(self.conn, self.addr)
 
     def handle_clientes(self,conn,addr):
         print(f'[NOVA CONEXÃO] Endereço: {addr}')
@@ -43,6 +42,7 @@ class Server():
                    
                 mensagem=mensagem_separada[1]
                 self.mensagens.append(mensagem)
+                #JOGO
                 self.enviar_mensagem(mensagem)
 
     def enviar_mensagem(self,mensagem):

@@ -7,7 +7,7 @@ import time
 class Client():
     PORT = 5050
     FORMATO = 'utf-8'
-    SERVER = "127.0.14.1"
+    SERVER = "127.0.3.1"
     ADDR = (SERVER, PORT)
 
     def __init__(self):
@@ -20,7 +20,7 @@ class Client():
             
     
     def handle_mensagens(self):
-        while(True):
+        #while(True):
             msg = self.client.recv(1024).decode()
             print('\n'+msg)
     
@@ -42,3 +42,6 @@ class Client():
 
 
 Client()
+while(True):
+    msg = input("digite sua mensagem:")
+    Client.enviar(msg)
