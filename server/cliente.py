@@ -25,12 +25,17 @@ class Client():
             print('\n'+msg)
     
     def enviar_mensagem(self):
-        mensagem = input("digite sua jogada")
+        mensagem = input("digite sua jogada\n")
         self.enviar("msg=" + mensagem)
 
     def enviar(self,mensagem):
         print("enviado")
         self.client.send(str(mensagem).encode(self.FORMATO))
+        msg = None
+        while msg is None:
+            msg = self.client.recv(1024).decode()
+        return msg
+
 
     def iniciar_envio(self):
         while(True):
@@ -44,4 +49,5 @@ class Client():
 Client()
 while(True):
     msg = input("digite sua mensagem:")
-    Client.enviar(msg)
+    resposta = Client.enviar(msg)
+    print("essa é a resposta:" + msg)
