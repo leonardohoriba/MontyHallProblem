@@ -1,5 +1,6 @@
 import socket
 import time
+from random import randrange
 
 
 
@@ -29,7 +30,11 @@ class Server():
     def handle_clientes(self,conn,addr):
         print(f'[NOVA CONEXÃO] Endereço: {addr}')
         self.nome = False
-
+        vencedor=str(randrange(0,2))
+        doors=['door1','door2','door3']
+        print('vencedor = ' + vencedor)
+        reposta = {}
+        status = None
         while(True):
             msg= conn.recv(1024).decode()
             if(msg):
@@ -41,9 +46,27 @@ class Server():
                 self.nome = mensagem_separada[1]
                    
                 mensagem=mensagem_separada[1]
-                self.mensagens.append(mensagem)
+                retorno = mensagem
+                if (mensagem == '1'):
+                    print(1)
+                    if vencedor == '1':
+                        retorno = str('{ door1 :O,door2:C,door3:C,status:win}')
+                    else:
+                        retorno = str('{ door1 :O,door2:C,door3:C,status:None}')
+                elif(mensagem == '2'):
+                    print(2)
+                    if vencedor == '2':
+                        retorno = str('{ door1:C,door2:O,door3:C,status:win}')
+                    else:
+                        retorno = str('{door1:C,door2:O,door3:C,status:None}')
+                elif(mensagem == '3'):
+                    print(3)
+                    if vencedor == '3':
+                        retorno = str('{door1:C,door2:C,door3:O,status:win}')
+                    else:
+                        retorno = str('{door1:C,door2:C,door3:O,status:None}')
                 #JOGO
-                self.enviar_mensagem(mensagem)
+                self.enviar_mensagem(retorno)
 
     def enviar_mensagem(self,mensagem):
         mensagem_envio=mensagem
