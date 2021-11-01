@@ -101,10 +101,9 @@ class Server():
                 mensagem_separada= msg.split("=")
                 self.nome = mensagem_separada[1]
                    
-                mensagem=mensagem_separada[1]
+                mensagem=int(mensagem_separada[1])
                 retorno = self.game1.jogada(mensagem)
-                retorno = int(retorno)
-                self.enviar_mensagem(retorno)
+                self.enviar_mensagem(str(retorno))
 
     def enviar_mensagem(self,mensagem):
         mensagem_envio=mensagem
