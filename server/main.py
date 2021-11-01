@@ -73,10 +73,12 @@ class Server():
     conn,addr=False,False
     run=True
     nome=False
+    game1=None
 
     def __init__(self):
         print(f"[INICIO] Socket iniciado no ip {self.SERVER_IP}")
         self.server.listen()
+        game1 = game()
         while (self.run):
             self.conn, self.addr = self.server.accept()
             self.handle_clientes(self.conn, self.addr)
@@ -100,8 +102,8 @@ class Server():
                 self.nome = mensagem_separada[1]
                    
                 mensagem=mensagem_separada[1]
-                retorno = mensagem
-                #JOGO
+                retorno = self.game1.jogada(mensagem)
+                retorno = int(retorno)
                 self.enviar_mensagem(retorno)
 
     def enviar_mensagem(self,mensagem):
