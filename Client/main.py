@@ -1,6 +1,6 @@
 import pygame
 import os
-import random
+from pygame import mouse
 from pygame.locals import *
 from sys import exit
 pygame.font.init()
@@ -9,6 +9,13 @@ pygame.font.init()
 WIDTH, HEIGHT, MARGIN_LEFT, MARGIN_RIGHT = 900, 600, 80, 80
 BACKGROUND_COLOR = (66, 66, 66)
 FPS = 60
+INFO_TEXT_0 = 'I have hidden a car behind one of these three doors.'
+INFO_TEXT_1 = 'Behind the other two doors there are goats. If you choose the door with the car, you win the car!'
+INFO_TEXT_2 = 'If you choose a door with a goat, you get a goat. Click on a door to choose it.'
+INFO_TEXT_3 = 'I will display one goat and allow to stay with your choice or switch doors.'
+INFO_TEXT_4 = 'Click on your door to stay with it, or click on the other door to switch.'
+INFO_TEXT_5 = 'I will then reveal the location of the car. Click on play again to restart the game.' 
+INFO_TEXT_6 = 'Should you stay with your first choice, or switch?'
 
 # **== DIMENSIONS ==**
 DOOR_WIDTH, DOOR_HEIGHT = 130, 180
@@ -16,6 +23,7 @@ BUTTON_WIDTH, BUTTON_HEIGHT = 80, 30
 DOOR_OPENED_WIDTH, DOOR_OPENED_HEIGHT = (DOOR_WIDTH * 1.8, DOOR_HEIGHT)
 CAR_WIDTH, CAR_HEIGHT =  (DOOR_HEIGHT*1.5, DOOR_WIDTH*2)
 GOAT_WIDTH, GOAT_HEIGHT = (DOOR_HEIGHT, DOOR_WIDTH)
+WIN_WIDTH, WIN_HEIGHT = 200, 100
 
 # **== POSITIONS ==**
 POS_TITLE = (10, 10)
@@ -39,6 +47,9 @@ POS_SWITCH_2 = (POS_DOOR_2[0] + DOOR_WIDTH/2 - 40, POS_DOOR_2[1] + DOOR_HEIGHT/2
 POS_SWITCH_3 = (POS_DOOR_3[0] + DOOR_WIDTH/2 - 40, POS_DOOR_3[1] + DOOR_HEIGHT/2)
 POS_STAYS = [POS_STAY_1, POS_STAY_2, POS_STAY_3]
 POS_SWITCHES = [POS_SWITCH_1, POS_SWITCH_2, POS_SWITCH_3]
+POS_X_1 = ((WIDTH - DOOR_WIDTH)/2 - 270, 135)
+POS_X_2 = ((WIDTH - DOOR_WIDTH)/2 - 20, 135)
+POS_X_3 = ((WIDTH - DOOR_WIDTH)/2 + 230, 135)
 # **== CONFIG ==**
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Monty Hall Problem")
@@ -96,17 +107,35 @@ class Button():
 def main():
     clock = pygame.time.Clock()
     run = True
+    info = False
+    request = 0
+    default_res = {
+                    'doors' : ['d', 'd', 'd'],
+                    'stay': 0,
+                    'switch': 0,
+                    'status': None,
+                    }
+    response = default_res
 
     main_font = pygame.font.SysFont("comicsans", 50)
     secondary_font = pygame.font.SysFont("comicsans", 30)
+    info_font = pygame.font.SysFont("comicsans", 20)
     mario_font = pygame.font.Font(os.path.join('Mario-Kart-DS.ttf'), 55)
 
     title = mario_font.render("MONTY HALL PROBLEM", 1, (0,0,0))
     stay = secondary_font.render("Stay", 1, (0,0,0))
     switch = secondary_font.render("Switch", 1, (0,0,0))
-
-
-    reset_button = Button((102, 61, 16), 20, HEIGHT - 50, BUTTON_WIDTH, BUTTON_HEIGHT, 'RESET')
+    text_info_0 = info_font.render(INFO_TEXT_0, 1, (0,0,0))
+    text_info_1 = info_font.render(INFO_TEXT_1, 1, (0,0,0))
+    text_info_2 = info_font.render(INFO_TEXT_2, 1, (0,0,0))
+    text_info_3 = info_font.render(INFO_TEXT_3, 1, (0,0,0))
+    text_info_4 = info_font.render(INFO_TEXT_4, 1, (0,0,0))
+    text_info_5 = info_font.render(INFO_TEXT_5, 1, (0,0,0))
+    text_info_6 = info_font.render(INFO_TEXT_6, 1, (0,0,0))
+    # **== OBJECTS ==**
+    reset_button = Button((102, 61, 16), WIDTH*0.83, HEIGHT*0.82, BUTTON_WIDTH, BUTTON_HEIGHT, 'RESET')
+    info_button = Button((102, 61, 16), WIDTH*0.80, HEIGHT*0.90, BUTTON_WIDTH+55, BUTTON_HEIGHT, 'INSTRUCTIONS')
+    again_button = Button((102, 61, 16), WIDTH*0.76, HEIGHT*0.55, BUTTON_WIDTH+35, BUTTON_HEIGHT, 'PLAY AGAIN')
     door_1 = Image('Assets', 'door.png', POS_DOOR_1[0], POS_DOOR_1[1], DOOR_WIDTH, DOOR_HEIGHT)
     door_2 = Image('Assets', 'door.png', POS_DOOR_2[0], POS_DOOR_2[1], DOOR_WIDTH, DOOR_HEIGHT)
     door_3 = Image('Assets', 'door.png', POS_DOOR_3[0], POS_DOOR_3[1], DOOR_WIDTH, DOOR_HEIGHT)
@@ -119,14 +148,21 @@ def main():
     goat_1 = Image('Assets', 'goat.png', POS_GOAT_1[0], POS_GOAT_1[1], GOAT_WIDTH, GOAT_WIDTH)
     goat_2 = Image('Assets', 'goat.png', POS_GOAT_2[0], POS_GOAT_2[1], GOAT_WIDTH, GOAT_WIDTH)
     goat_3 = Image('Assets', 'goat.png', POS_GOAT_3[0], POS_GOAT_3[1], GOAT_WIDTH, GOAT_WIDTH)
+    you_win_1 = Image('Assets', 'win.png', WIDTH*0.09, HEIGHT*0.18, WIN_WIDTH, WIN_HEIGHT)
+    you_win_2 = Image('Assets', 'win.png', WIDTH*0.37, HEIGHT*0.18, WIN_WIDTH, WIN_HEIGHT)
+    you_win_3 = Image('Assets', 'win.png', WIDTH*0.65, HEIGHT*0.18, WIN_WIDTH, WIN_HEIGHT)
+    you_lose_1 = Image('Assets', 'x.png', POS_X_1[0], POS_X_1[1], WIN_WIDTH, WIN_HEIGHT+50)
+    you_lose_2 = Image('Assets', 'x.png', POS_X_2[0], POS_X_2[1], WIN_WIDTH, WIN_HEIGHT+50)
+    you_lose_3 = Image('Assets', 'x.png', POS_X_3[0], POS_X_3[1], WIN_WIDTH, WIN_HEIGHT+50)
 
     doors = [door_1, door_2, door_3]
     doors_opened = [door_opened_1, door_opened_2, door_opened_3]
     cars = [car_1, car_2, car_3]
     goats = [goat_1, goat_2, goat_3]
-    
+    wins = [you_win_1, you_win_2, you_win_3]
+    loses = [you_lose_1, you_lose_2, you_lose_3]
     # **== Renderização das figuras, em ordem de profundidade ==**
-    def render():
+    def render(response=default_res):
         WIN.fill(BACKGROUND_COLOR)
         # WIN.blit(BACKGROUND, (0,0))
         WIN.blit(title, (WIDTH/7, 30))
@@ -143,13 +179,11 @@ def main():
         # # goat_1.draw()
         # # goat_2.draw()
         # goat_3.draw()
+        # you_lose_1.draw()
+        # you_lose_2.draw()
+        # you_lose_3.draw()
 
-        response = {
-            'position' : ['d', 'd', 'g'],
-            'stay': 1,
-            'switch': 2
-        }
-        for idx, elem in enumerate(response['position']):
+        for idx, elem in enumerate(response['doors']):
             if elem == 'd':
                 doors[idx].draw()
             elif elem == 'g':
@@ -162,18 +196,32 @@ def main():
                 WIN.blit(stay, POS_STAYS[response['stay'] - 1])
             if response['switch']:
                 WIN.blit(switch, POS_SWITCHES[response['switch'] - 1])
-
-
-        reset_button.draw(WIN, (0,0,0))
+            if response['status'] == 'lose' and request:
+                loses[request-1].draw()
+            if response['status'] == 'win' and request:
+                wins[request-1].draw() 
         
+        reset_button.draw(WIN, (0,0,0))
+        again_button.draw(WIN, (0,0,0))
+        info_button.draw(WIN, (0,0,0))
+        
+        if info:
+            WIN.blit(text_info_0, (WIDTH*0.1, HEIGHT*0.8))
+            WIN.blit(text_info_1, (WIDTH*0.1, HEIGHT*0.825))
+            WIN.blit(text_info_2, (WIDTH*0.1, HEIGHT*0.85))
+            WIN.blit(text_info_3, (WIDTH*0.1, HEIGHT*0.875))
+            WIN.blit(text_info_4, (WIDTH*0.1, HEIGHT*0.9))
+            WIN.blit(text_info_5, (WIDTH*0.1, HEIGHT*0.925))
+            WIN.blit(text_info_6, (WIDTH*0.1, HEIGHT*0.95))
+
 
         pygame.display.flip() 
         # pygame.display.update() #flip melhor que o update em processamento
-    
+    render()
     while run:
         clock.tick(FPS)
-        render()
-
+        render(response)
+        
         for event in pygame.event.get():
             mouse_pos = pygame.mouse.get_pos()
             if event.type == pygame.QUIT:
@@ -183,18 +231,29 @@ def main():
                 # Button Clicks
                 if reset_button.isOver(mouse_pos): 
                     print(mouse_pos)
+                    response = default_res
                 if door_1.isOver(mouse_pos): 
-                    request = 0
-                    print(request)
-                    # function send request to server
-                if door_2.isOver(mouse_pos): 
                     request = 1
                     print(request)
                     # function send request to server
-                if door_3.isOver(mouse_pos): 
+                if door_2.isOver(mouse_pos): 
                     request = 2
                     print(request)
+                    response = {
+                    'doors' : ['g', 'c', 'g'],
+                    'stay': 0,
+                    'switch': 0,
+                    'status': None,
+                    }
                     # function send request to server
+                if door_3.isOver(mouse_pos): 
+                    request = 3
+                    print(request)
+                    # function send request to server
+                if info_button.isOver(mouse_pos):
+                    info = not(info)
+                if again_button.isOver(mouse_pos):
+                    response = default_res
                 
  
             if event.type == pygame.MOUSEMOTION:
@@ -203,6 +262,17 @@ def main():
                     reset_button.color = (89, 66, 42)
                 else:
                     reset_button.color = (102, 61, 16)
+
+                if again_button.isOver(mouse_pos):
+                    again_button.color = (89, 66, 42)
+                else:
+                    again_button.color = (102, 61, 16)
+
+                if info_button.isOver(mouse_pos):
+                    info_button.color = (89, 66, 42)
+                else:
+                    info_button.color = (102, 61, 16)
+                
 
     pygame.quit()
     exit()
