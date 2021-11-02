@@ -85,11 +85,6 @@ class Server():
     def handle_clientes(self,conn,addr):
         print(f'[NOVA CONEXÃO] Endereço: {addr}')
         self.nome = False
-        vencedor=str(randrange(0,2))
-        doors=['door1','door2','door3']
-        # print('vencedor = ' + vencedor)
-        reposta = {}
-        status = None
         while(True):
             msg= conn.recv(1024).decode()
             if(msg):
