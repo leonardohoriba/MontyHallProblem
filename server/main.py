@@ -1,4 +1,3 @@
-from _typeshed import NoneType
 import socket
 import time
 from random import randrange
@@ -35,7 +34,7 @@ class game():
             self.nr_jogada=3
             self.retorno['stay']='None'
             self.retorno['switch']='None'
-            self.vector[win]='car'
+            self.vector[win]='c'
             if selecionada == win:
                 self.retorno['status']='win'
                 for i in self.doors:
@@ -62,7 +61,7 @@ class Server():
     conexoes = {}
     mensagens = []
     
-    SERVER_IP = '127.0.3.1'
+    SERVER_IP = '127.0.3.4'
     #socket.gethostbyname(socket.gethostname())
     PORT = 5050
     ADDR = (SERVER_IP, PORT)
@@ -73,7 +72,7 @@ class Server():
     conn,addr=False,False
     run=True
     nome=False
-    game1=None
+    game1=game()
 
     def __init__(self):
         print(f"[INICIO] Socket iniciado no ip {self.SERVER_IP}")

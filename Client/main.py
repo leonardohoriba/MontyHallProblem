@@ -3,6 +3,10 @@ import os
 from pygame import mouse
 from pygame.locals import *
 from sys import exit
+import socket
+import time
+import ast
+import json
 pygame.font.init()
 
 # **== CONSTANTS ==**
@@ -50,6 +54,7 @@ POS_SWITCHES = [POS_SWITCH_1, POS_SWITCH_2, POS_SWITCH_3]
 POS_X_1 = ((WIDTH - DOOR_WIDTH)/2 - 270, 135)
 POS_X_2 = ((WIDTH - DOOR_WIDTH)/2 - 20, 135)
 POS_X_3 = ((WIDTH - DOOR_WIDTH)/2 + 230, 135)
+
 # **== CONFIG ==**
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Monty Hall Problem")
@@ -104,23 +109,46 @@ class Button():
                 return True
         return False
 
+class Client():
+    PORT = 5050
+    FORMATO = 'utf-8'
+    SERVER = "127.0.3.4"
+    ADDR = (SERVER, PORT)
+
+    def __init__(self):
+        self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.client.connect(self.ADDR)
+    
+
+
+    def jogar(self,mensagem):
+        self.client.send(str(mensagem).encode(self.FORMATO))
+        print("enviado")
+        msg = None
+        while msg is None:
+            msg = self.client.recv(1024).decode()
+        return msg
+
 def main():
+    
+    cliente1 = Client()
+        
     clock = pygame.time.Clock()
     run = True
     info = False
     request = 0
     default_res = {
-                    'doors' : ['d', 'd', 'd'],
-                    'stay': 0,
-                    'switch': 0,
-                    'status': None,
+                    'doors' : "['d', 'd', 'd']",
+                    'stay': 'None',
+                    'switch': 'None',
+                    'status': 'None',
                     }
     response = default_res
 
     main_font = pygame.font.SysFont("comicsans", 50)
     secondary_font = pygame.font.SysFont("comicsans", 30)
     info_font = pygame.font.SysFont("comicsans", 20)
-    mario_font = pygame.font.Font(os.path.join('Mario-Kart-DS.ttf'), 55)
+    mario_font = pygame.font.Font(os.path.join('../Assets', 'Mario-Kart-DS.ttf'), 55)
 
     title = mario_font.render("MONTY HALL PROBLEM", 1, (0,0,0))
     stay = secondary_font.render("Stay", 1, (0,0,0))
@@ -132,28 +160,29 @@ def main():
     text_info_4 = info_font.render(INFO_TEXT_4, 1, (0,0,0))
     text_info_5 = info_font.render(INFO_TEXT_5, 1, (0,0,0))
     text_info_6 = info_font.render(INFO_TEXT_6, 1, (0,0,0))
+
     # **== OBJECTS ==**
     reset_button = Button((102, 61, 16), WIDTH*0.83, HEIGHT*0.82, BUTTON_WIDTH, BUTTON_HEIGHT, 'RESET')
     info_button = Button((102, 61, 16), WIDTH*0.80, HEIGHT*0.90, BUTTON_WIDTH+55, BUTTON_HEIGHT, 'INSTRUCTIONS')
     again_button = Button((102, 61, 16), WIDTH*0.76, HEIGHT*0.55, BUTTON_WIDTH+35, BUTTON_HEIGHT, 'PLAY AGAIN')
-    door_1 = Image('Assets', 'door.png', POS_DOOR_1[0], POS_DOOR_1[1], DOOR_WIDTH, DOOR_HEIGHT)
-    door_2 = Image('Assets', 'door.png', POS_DOOR_2[0], POS_DOOR_2[1], DOOR_WIDTH, DOOR_HEIGHT)
-    door_3 = Image('Assets', 'door.png', POS_DOOR_3[0], POS_DOOR_3[1], DOOR_WIDTH, DOOR_HEIGHT)
-    door_opened_1 = Image('Assets', 'door_opened.png', POS_DOOR_OPENED_1[0], POS_DOOR_OPENED_1[1], DOOR_OPENED_WIDTH, DOOR_OPENED_HEIGHT)
-    door_opened_2 = Image('Assets', 'door_opened.png', POS_DOOR_OPENED_2[0], POS_DOOR_OPENED_2[1], DOOR_OPENED_WIDTH, DOOR_OPENED_HEIGHT)
-    door_opened_3 = Image('Assets', 'door_opened.png', POS_DOOR_OPENED_3[0], POS_DOOR_OPENED_3[1], DOOR_OPENED_WIDTH, DOOR_OPENED_HEIGHT)
-    car_1 = Image('Assets', 'car.png', POS_CAR_1[0], POS_CAR_1[1], CAR_WIDTH, CAR_WIDTH)
-    car_2 = Image('Assets', 'car.png', POS_CAR_2[0], POS_CAR_2[1], CAR_WIDTH, CAR_WIDTH)
-    car_3 = Image('Assets', 'car.png', POS_CAR_3[0], POS_CAR_3[1], CAR_WIDTH, CAR_WIDTH)
-    goat_1 = Image('Assets', 'goat.png', POS_GOAT_1[0], POS_GOAT_1[1], GOAT_WIDTH, GOAT_WIDTH)
-    goat_2 = Image('Assets', 'goat.png', POS_GOAT_2[0], POS_GOAT_2[1], GOAT_WIDTH, GOAT_WIDTH)
-    goat_3 = Image('Assets', 'goat.png', POS_GOAT_3[0], POS_GOAT_3[1], GOAT_WIDTH, GOAT_WIDTH)
-    you_win_1 = Image('Assets', 'win.png', WIDTH*0.09, HEIGHT*0.18, WIN_WIDTH, WIN_HEIGHT)
-    you_win_2 = Image('Assets', 'win.png', WIDTH*0.37, HEIGHT*0.18, WIN_WIDTH, WIN_HEIGHT)
-    you_win_3 = Image('Assets', 'win.png', WIDTH*0.65, HEIGHT*0.18, WIN_WIDTH, WIN_HEIGHT)
-    you_lose_1 = Image('Assets', 'x.png', POS_X_1[0], POS_X_1[1], WIN_WIDTH, WIN_HEIGHT+50)
-    you_lose_2 = Image('Assets', 'x.png', POS_X_2[0], POS_X_2[1], WIN_WIDTH, WIN_HEIGHT+50)
-    you_lose_3 = Image('Assets', 'x.png', POS_X_3[0], POS_X_3[1], WIN_WIDTH, WIN_HEIGHT+50)
+    door_1 = Image('../Assets', 'door.png', POS_DOOR_1[0], POS_DOOR_1[1], DOOR_WIDTH, DOOR_HEIGHT)
+    door_2 = Image('../Assets', 'door.png', POS_DOOR_2[0], POS_DOOR_2[1], DOOR_WIDTH, DOOR_HEIGHT)
+    door_3 = Image('../Assets', 'door.png', POS_DOOR_3[0], POS_DOOR_3[1], DOOR_WIDTH, DOOR_HEIGHT)
+    door_opened_1 = Image('../Assets', 'door_opened.png', POS_DOOR_OPENED_1[0], POS_DOOR_OPENED_1[1], DOOR_OPENED_WIDTH, DOOR_OPENED_HEIGHT)
+    door_opened_2 = Image('../Assets', 'door_opened.png', POS_DOOR_OPENED_2[0], POS_DOOR_OPENED_2[1], DOOR_OPENED_WIDTH, DOOR_OPENED_HEIGHT)
+    door_opened_3 = Image('../Assets', 'door_opened.png', POS_DOOR_OPENED_3[0], POS_DOOR_OPENED_3[1], DOOR_OPENED_WIDTH, DOOR_OPENED_HEIGHT)
+    car_1 = Image('../Assets', 'car.png', POS_CAR_1[0], POS_CAR_1[1], CAR_WIDTH, CAR_WIDTH)
+    car_2 = Image('../Assets', 'car.png', POS_CAR_2[0], POS_CAR_2[1], CAR_WIDTH, CAR_WIDTH)
+    car_3 = Image('../Assets', 'car.png', POS_CAR_3[0], POS_CAR_3[1], CAR_WIDTH, CAR_WIDTH)
+    goat_1 = Image('../Assets', 'goat.png', POS_GOAT_1[0], POS_GOAT_1[1], GOAT_WIDTH, GOAT_WIDTH)
+    goat_2 = Image('../Assets', 'goat.png', POS_GOAT_2[0], POS_GOAT_2[1], GOAT_WIDTH, GOAT_WIDTH)
+    goat_3 = Image('../Assets', 'goat.png', POS_GOAT_3[0], POS_GOAT_3[1], GOAT_WIDTH, GOAT_WIDTH)
+    you_win_1 = Image('../Assets', 'win.png', WIDTH*0.09, HEIGHT*0.18, WIN_WIDTH, WIN_HEIGHT)
+    you_win_2 = Image('../Assets', 'win.png', WIDTH*0.37, HEIGHT*0.18, WIN_WIDTH, WIN_HEIGHT)
+    you_win_3 = Image('../Assets', 'win.png', WIDTH*0.65, HEIGHT*0.18, WIN_WIDTH, WIN_HEIGHT)
+    you_lose_1 = Image('../Assets', 'x.png', POS_X_1[0], POS_X_1[1], WIN_WIDTH, WIN_HEIGHT+50)
+    you_lose_2 = Image('../Assets', 'x.png', POS_X_2[0], POS_X_2[1], WIN_WIDTH, WIN_HEIGHT+50)
+    you_lose_3 = Image('../Assets', 'x.png', POS_X_3[0], POS_X_3[1], WIN_WIDTH, WIN_HEIGHT+50)
 
     doors = [door_1, door_2, door_3]
     doors_opened = [door_opened_1, door_opened_2, door_opened_3]
@@ -167,23 +196,11 @@ def main():
         # WIN.blit(BACKGROUND, (0,0))
         WIN.blit(title, (WIDTH/7, 30))
 
-        # door_1.draw()
-        # door_2.draw()
-        # # door_3.draw()
-        # # door_opened_1.draw()
-        # # door_opened_2.draw()
-        # door_opened_3.draw()
-        # # car_1.draw()
-        # # car_2.draw()
-        # # car_3.draw()
-        # # goat_1.draw()
-        # # goat_2.draw()
-        # goat_3.draw()
-        # you_lose_1.draw()
-        # you_lose_2.draw()
-        # you_lose_3.draw()
-
-        for idx, elem in enumerate(response['doors']):
+        # print(response['doors'])
+        door_list = list(response['doors'])
+        filtered = filter(lambda elem: elem not in [',', "'", ' ', ']', '[', '"'], door_list)
+        for idx, elem in enumerate(list(filtered)):
+            print('elem: ', elem)
             if elem == 'd':
                 doors[idx].draw()
             elif elem == 'g':
@@ -192,14 +209,14 @@ def main():
             elif elem == 'c':
                 doors_opened[idx].draw()
                 cars[idx].draw()
-            if response['stay']:
-                WIN.blit(stay, POS_STAYS[response['stay'] - 1])
-            if response['switch']:
-                WIN.blit(switch, POS_SWITCHES[response['switch'] - 1])
-            if response['status'] == 'lose' and request:
-                loses[request-1].draw()
-            if response['status'] == 'win' and request:
-                wins[request-1].draw() 
+            if response['stay'] != 'None':
+                WIN.blit(stay, POS_STAYS[int(response['stay'])])
+            if response['stay'] != 'None':
+                WIN.blit(switch, POS_SWITCHES[int(response['switch'])])
+            if response['status'] == 'lose' and int(request):
+                loses[int(request)].draw()
+            if response['status'] == 'win' and int(request):
+                wins[int(request)].draw() 
         
         reset_button.draw(WIN, (0,0,0))
         again_button.draw(WIN, (0,0,0))
@@ -217,7 +234,8 @@ def main():
 
         pygame.display.flip() 
         # pygame.display.update() #flip melhor que o update em processamento
-    render()
+    render(default_res)
+    
     while run:
         clock.tick(FPS)
         render(response)
@@ -232,24 +250,29 @@ def main():
                 if reset_button.isOver(mouse_pos): 
                     print(mouse_pos)
                     response = default_res
+
                 if door_1.isOver(mouse_pos): 
-                    request = 1
-                    print(request)
-                    # function send request to server
+                    request = '0'
+                    # print(request)
+                    response = cliente1.jogar("msg=" + request)
+                    response = ast.literal_eval(response)
+                    time.sleep(0.2)
+                    print(response)
+                    
                 if door_2.isOver(mouse_pos): 
-                    request = 2
-                    print(request)
-                    response = {
-                    'doors' : ['g', 'c', 'g'],
-                    'stay': 0,
-                    'switch': 0,
-                    'status': None,
-                    }
-                    # function send request to server
+                    request = '1'
+                    # print(request)
+                    response = cliente1.jogar("msg=" + request)
+                    response = ast.literal_eval(response)
+                    time.sleep(0.2)
+
                 if door_3.isOver(mouse_pos): 
-                    request = 3
-                    print(request)
-                    # function send request to server
+                    request = '2'
+                    # print(request)
+                    response = cliente1.jogar("msg=" + request)
+                    response = ast.literal_eval(response)
+                    time.sleep(0.2)
+
                 if info_button.isOver(mouse_pos):
                     info = not(info)
                 if again_button.isOver(mouse_pos):
