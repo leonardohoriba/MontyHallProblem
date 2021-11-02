@@ -87,7 +87,7 @@ class Server():
         self.nome = False
         vencedor=str(randrange(0,2))
         doors=['door1','door2','door3']
-        print('vencedor = ' + vencedor)
+        # print('vencedor = ' + vencedor)
         reposta = {}
         status = None
         while(True):
@@ -95,7 +95,7 @@ class Server():
             if(msg):
                 if(msg=='msg=exit'):
                     self.conn.close()
-                print(msg)
+                # print(msg)
                 
                 mensagem_separada= msg.split("=")
                 self.nome = mensagem_separada[1]

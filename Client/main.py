@@ -123,7 +123,7 @@ class Client():
 
     def jogar(self,mensagem):
         self.client.send(str(mensagem).encode(self.FORMATO))
-        print("enviado")
+        # print("sent")
         msg = None
         while msg is None:
             msg = self.client.recv(1024).decode()
@@ -196,11 +196,9 @@ def main():
         # WIN.blit(BACKGROUND, (0,0))
         WIN.blit(title, (WIDTH/7, 30))
 
-        # print(response['doors'])
         door_list = list(response['doors'])
         filtered = filter(lambda elem: elem not in [',', "'", ' ', ']', '[', '"'], door_list)
         for idx, elem in enumerate(list(filtered)):
-            print('elem: ', elem)
             if elem == 'd':
                 doors[idx].draw()
             elif elem == 'g':
@@ -213,16 +211,16 @@ def main():
                 WIN.blit(stay, POS_STAYS[int(response['stay'])])
             if response['stay'] != 'None':
                 WIN.blit(switch, POS_SWITCHES[int(response['switch'])])
-            if response['status'] == 'lose' and int(request):
+            if response['status'] == 'lose':
                 loses[int(request)].draw()
-            if response['status'] == 'win' and int(request):
+            if response['status'] == 'win':
                 wins[int(request)].draw() 
         
-        reset_button.draw(WIN, (0,0,0))
-        again_button.draw(WIN, (0,0,0))
+        # reset_button.draw(WIN, (0,0,0))
+        # again_button.draw(WIN, (0,0,0))
         info_button.draw(WIN, (0,0,0))
-        
-        if info:
+
+        if info: #print text with game instructions
             WIN.blit(text_info_0, (WIDTH*0.1, HEIGHT*0.8))
             WIN.blit(text_info_1, (WIDTH*0.1, HEIGHT*0.825))
             WIN.blit(text_info_2, (WIDTH*0.1, HEIGHT*0.85))
@@ -235,7 +233,7 @@ def main():
         pygame.display.flip() 
         # pygame.display.update() #flip melhor que o update em processamento
     render(default_res)
-    
+
     while run:
         clock.tick(FPS)
         render(response)
@@ -247,49 +245,44 @@ def main():
             
             if event.type == pygame.MOUSEBUTTONDOWN: 
                 # Button Clicks
-                if reset_button.isOver(mouse_pos): 
-                    print(mouse_pos)
-                    response = default_res
+                # if reset_button.isOver(mouse_pos): 
+                #     response = default_res
 
                 if door_1.isOver(mouse_pos): 
                     request = '0'
-                    # print(request)
                     response = cliente1.jogar("msg=" + request)
                     response = ast.literal_eval(response)
                     time.sleep(0.2)
-                    print(response)
                     
                 if door_2.isOver(mouse_pos): 
                     request = '1'
-                    # print(request)
                     response = cliente1.jogar("msg=" + request)
                     response = ast.literal_eval(response)
                     time.sleep(0.2)
 
                 if door_3.isOver(mouse_pos): 
                     request = '2'
-                    # print(request)
                     response = cliente1.jogar("msg=" + request)
                     response = ast.literal_eval(response)
                     time.sleep(0.2)
 
                 if info_button.isOver(mouse_pos):
                     info = not(info)
-                if again_button.isOver(mouse_pos):
-                    response = default_res
+                # if again_button.isOver(mouse_pos):
+                #     response = default_res
                 
  
             if event.type == pygame.MOUSEMOTION:
                 # Button Motion
-                if reset_button.isOver(mouse_pos):
-                    reset_button.color = (89, 66, 42)
-                else:
-                    reset_button.color = (102, 61, 16)
+                # if reset_button.isOver(mouse_pos):
+                #     reset_button.color = (89, 66, 42)
+                # else:
+                #     reset_button.color = (102, 61, 16)
 
-                if again_button.isOver(mouse_pos):
-                    again_button.color = (89, 66, 42)
-                else:
-                    again_button.color = (102, 61, 16)
+                # if again_button.isOver(mouse_pos):
+                #     again_button.color = (89, 66, 42)
+                # else:
+                #     again_button.color = (102, 61, 16)
 
                 if info_button.isOver(mouse_pos):
                     info_button.color = (89, 66, 42)
