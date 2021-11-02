@@ -9,7 +9,7 @@ class game():
     vencedor = None
     nr_jogada = 1
     def __init__(self):
-        self.vencedor=int(randrange(0,2))
+        self.vencedor=int(randrange(0,3))
         self.vector=["d","d","d"]
         self.retorno = { 'doors':'["d","d","d"]','status':'None','switch':'None','stay':'None'}
     def jogada(self,selecionada):
@@ -52,7 +52,7 @@ class game():
             self.nr_jogada=1
             self.retorno = { 'doors':'["d","d","d"]','status':'None','switch':'None','stay':'None'}
             self.vector=["d","d","d"]
-            self.vencedor=int(randrange(0,2))
+            self.vencedor=int(randrange(0,3))
             return str(self.retorno)
             
 
