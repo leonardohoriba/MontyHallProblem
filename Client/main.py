@@ -148,7 +148,7 @@ def main():
     main_font = pygame.font.SysFont("comicsans", 50)
     secondary_font = pygame.font.SysFont("comicsans", 30)
     info_font = pygame.font.SysFont("comicsans", 20)
-    mario_font = pygame.font.Font(os.path.join('../Assets', 'Mario-Kart-DS.ttf'), 55)
+    mario_font = pygame.font.Font(os.path.join(r'./Assets', r'Mario-Kart-DS.ttf'), 55)
 
     title = mario_font.render("MONTY HALL PROBLEM", 1, (0,0,0))
     stay = secondary_font.render("Stay", 1, (0,0,0))
@@ -165,24 +165,24 @@ def main():
     reset_button = Button((102, 61, 16), WIDTH*0.83, HEIGHT*0.82, BUTTON_WIDTH, BUTTON_HEIGHT, 'RESET')
     info_button = Button((102, 61, 16), WIDTH*0.80, HEIGHT*0.90, BUTTON_WIDTH+55, BUTTON_HEIGHT, 'INSTRUCTIONS')
     again_button = Button((102, 61, 16), WIDTH*0.76, HEIGHT*0.55, BUTTON_WIDTH+35, BUTTON_HEIGHT, 'PLAY AGAIN')
-    door_1 = Image('../Assets', 'door.png', POS_DOOR_1[0], POS_DOOR_1[1], DOOR_WIDTH, DOOR_HEIGHT)
-    door_2 = Image('../Assets', 'door.png', POS_DOOR_2[0], POS_DOOR_2[1], DOOR_WIDTH, DOOR_HEIGHT)
-    door_3 = Image('../Assets', 'door.png', POS_DOOR_3[0], POS_DOOR_3[1], DOOR_WIDTH, DOOR_HEIGHT)
-    door_opened_1 = Image('../Assets', 'door_opened.png', POS_DOOR_OPENED_1[0], POS_DOOR_OPENED_1[1], DOOR_OPENED_WIDTH, DOOR_OPENED_HEIGHT)
-    door_opened_2 = Image('../Assets', 'door_opened.png', POS_DOOR_OPENED_2[0], POS_DOOR_OPENED_2[1], DOOR_OPENED_WIDTH, DOOR_OPENED_HEIGHT)
-    door_opened_3 = Image('../Assets', 'door_opened.png', POS_DOOR_OPENED_3[0], POS_DOOR_OPENED_3[1], DOOR_OPENED_WIDTH, DOOR_OPENED_HEIGHT)
-    car_1 = Image('../Assets', 'car.png', POS_CAR_1[0], POS_CAR_1[1], CAR_WIDTH, CAR_WIDTH)
-    car_2 = Image('../Assets', 'car.png', POS_CAR_2[0], POS_CAR_2[1], CAR_WIDTH, CAR_WIDTH)
-    car_3 = Image('../Assets', 'car.png', POS_CAR_3[0], POS_CAR_3[1], CAR_WIDTH, CAR_WIDTH)
-    goat_1 = Image('../Assets', 'goat.png', POS_GOAT_1[0], POS_GOAT_1[1], GOAT_WIDTH, GOAT_WIDTH)
-    goat_2 = Image('../Assets', 'goat.png', POS_GOAT_2[0], POS_GOAT_2[1], GOAT_WIDTH, GOAT_WIDTH)
-    goat_3 = Image('../Assets', 'goat.png', POS_GOAT_3[0], POS_GOAT_3[1], GOAT_WIDTH, GOAT_WIDTH)
-    you_win_1 = Image('../Assets', 'win.png', WIDTH*0.09, HEIGHT*0.18, WIN_WIDTH, WIN_HEIGHT)
-    you_win_2 = Image('../Assets', 'win.png', WIDTH*0.37, HEIGHT*0.18, WIN_WIDTH, WIN_HEIGHT)
-    you_win_3 = Image('../Assets', 'win.png', WIDTH*0.65, HEIGHT*0.18, WIN_WIDTH, WIN_HEIGHT)
-    you_lose_1 = Image('../Assets', 'x.png', POS_X_1[0], POS_X_1[1], WIN_WIDTH, WIN_HEIGHT+50)
-    you_lose_2 = Image('../Assets', 'x.png', POS_X_2[0], POS_X_2[1], WIN_WIDTH, WIN_HEIGHT+50)
-    you_lose_3 = Image('../Assets', 'x.png', POS_X_3[0], POS_X_3[1], WIN_WIDTH, WIN_HEIGHT+50)
+    door_1 = Image(r'./Assets', 'door.png', POS_DOOR_1[0], POS_DOOR_1[1], DOOR_WIDTH, DOOR_HEIGHT)
+    door_2 = Image(r'./Assets', 'door.png', POS_DOOR_2[0], POS_DOOR_2[1], DOOR_WIDTH, DOOR_HEIGHT)
+    door_3 = Image(r'./Assets', 'door.png', POS_DOOR_3[0], POS_DOOR_3[1], DOOR_WIDTH, DOOR_HEIGHT)
+    door_opened_1 = Image(r'./Assets', 'door_opened.png', POS_DOOR_OPENED_1[0], POS_DOOR_OPENED_1[1], DOOR_OPENED_WIDTH, DOOR_OPENED_HEIGHT)
+    door_opened_2 = Image(r'./Assets', 'door_opened.png', POS_DOOR_OPENED_2[0], POS_DOOR_OPENED_2[1], DOOR_OPENED_WIDTH, DOOR_OPENED_HEIGHT)
+    door_opened_3 = Image(r'./Assets', 'door_opened.png', POS_DOOR_OPENED_3[0], POS_DOOR_OPENED_3[1], DOOR_OPENED_WIDTH, DOOR_OPENED_HEIGHT)
+    car_1 = Image(r'./Assets', 'car.png', POS_CAR_1[0], POS_CAR_1[1], CAR_WIDTH, CAR_WIDTH)
+    car_2 = Image(r'./Assets', 'car.png', POS_CAR_2[0], POS_CAR_2[1], CAR_WIDTH, CAR_WIDTH)
+    car_3 = Image(r'./Assets', 'car.png', POS_CAR_3[0], POS_CAR_3[1], CAR_WIDTH, CAR_WIDTH)
+    goat_1 = Image(r'./Assets', 'goat.png', POS_GOAT_1[0], POS_GOAT_1[1], GOAT_WIDTH, GOAT_WIDTH)
+    goat_2 = Image(r'./Assets', 'goat.png', POS_GOAT_2[0], POS_GOAT_2[1], GOAT_WIDTH, GOAT_WIDTH)
+    goat_3 = Image(r'./Assets', 'goat.png', POS_GOAT_3[0], POS_GOAT_3[1], GOAT_WIDTH, GOAT_WIDTH)
+    you_win_1 = Image(r'./Assets', 'win.png', WIDTH*0.09, HEIGHT*0.18, WIN_WIDTH, WIN_HEIGHT)
+    you_win_2 = Image(r'./Assets', 'win.png', WIDTH*0.37, HEIGHT*0.18, WIN_WIDTH, WIN_HEIGHT)
+    you_win_3 = Image(r'./Assets', 'win.png', WIDTH*0.65, HEIGHT*0.18, WIN_WIDTH, WIN_HEIGHT)
+    you_lose_1 = Image(r'./Assets', 'x.png', POS_X_1[0], POS_X_1[1], WIN_WIDTH, WIN_HEIGHT+50)
+    you_lose_2 = Image(r'./Assets', 'x.png', POS_X_2[0], POS_X_2[1], WIN_WIDTH, WIN_HEIGHT+50)
+    you_lose_3 = Image(r'./Assets', 'x.png', POS_X_3[0], POS_X_3[1], WIN_WIDTH, WIN_HEIGHT+50)
 
     doors = [door_1, door_2, door_3]
     doors_opened = [door_opened_1, door_opened_2, door_opened_3]
@@ -241,6 +241,7 @@ def main():
         for event in pygame.event.get():
             mouse_pos = pygame.mouse.get_pos()
             if event.type == pygame.QUIT:
+                cliente1.jogar("exit")
                 run = False
             
             if event.type == pygame.MOUSEBUTTONDOWN: 

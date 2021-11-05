@@ -62,7 +62,6 @@ class Server():
     mensagens = []
     
     SERVER_IP = '127.0.3.4'
-    #socket.gethostbyname(socket.gethostname())
     PORT = 5050
     ADDR = (SERVER_IP, PORT)
     FORMATO = 'utf-8'
@@ -85,27 +84,27 @@ class Server():
     def handle_clientes(self,conn,addr):
         print(f'[NOVA CONEXÃO] Endereço: {addr}')
         self.nome = False
-        while(True):
+        while(self.run ==True):
             msg= conn.recv(1024).decode()
             if(msg):
-                if(msg=='msg=exit'):
+                if(msg=='exit'):
+                    print('[ENCERRANDO CONEXÃO DO SOCKET]')
                     self.conn.close()
-                # print(msg)
-                
-                mensagem_separada= msg.split("=")
-                self.nome = mensagem_separada[1]
-                   
-                mensagem=int(mensagem_separada[1])
-                retorno = self.game1.jogada(mensagem)
-                self.enviar_mensagem(str(retorno))
+                    self.run=False
+                    break
+                else:
+                    mensagem_separada= msg.split("=")
+                    self.nome = mensagem_separada[1]
+                    
+                    mensagem=int(mensagem_separada[1])
+                    retorno = self.game1.jogada(mensagem)
+                    self.enviar_mensagem(str(retorno))
 
     def enviar_mensagem(self,mensagem):
         mensagem_envio=mensagem
         self.conn.send(mensagem_envio.encode(self.FORMATO))
         time.sleep(0.2)
     
-    def fechar_servidor(self):
-        pass
 
         
 

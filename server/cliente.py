@@ -6,7 +6,7 @@ import time
 class Client():
     PORT = 5050
     FORMATO = 'utf-8'
-    SERVER = "127.0.3.1"
+    SERVER = "127.0.3.4"
     ADDR = (SERVER, PORT)
 
     def __init__(self):
