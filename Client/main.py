@@ -123,7 +123,6 @@ class Client():
 
     def jogar(self,mensagem):
         self.client.send(str(mensagem).encode(self.FORMATO))
-        # print("sent")
         msg = None
         while msg is None:
             msg = self.client.recv(1024).decode()
@@ -216,8 +215,7 @@ def main():
             if response['status'] == 'win':
                 wins[int(request)].draw() 
         
-        # reset_button.draw(WIN, (0,0,0))
-        # again_button.draw(WIN, (0,0,0))
+
         info_button.draw(WIN, (0,0,0))
 
         if info: #print text with game instructions
@@ -231,7 +229,7 @@ def main():
 
 
         pygame.display.flip() 
-        # pygame.display.update() #flip melhor que o update em processamento
+
     render(default_res)
 
     while run:
@@ -245,9 +243,7 @@ def main():
                 run = False
             
             if event.type == pygame.MOUSEBUTTONDOWN: 
-                # Button Clicks
-                # if reset_button.isOver(mouse_pos): 
-                #     response = default_res
+
 
                 if door_1.isOver(mouse_pos): 
                     request = '0'
@@ -269,21 +265,11 @@ def main():
 
                 if info_button.isOver(mouse_pos):
                     info = not(info)
-                # if again_button.isOver(mouse_pos):
-                #     response = default_res
+
                 
  
             if event.type == pygame.MOUSEMOTION:
-                # Button Motion
-                # if reset_button.isOver(mouse_pos):
-                #     reset_button.color = (89, 66, 42)
-                # else:
-                #     reset_button.color = (102, 61, 16)
 
-                # if again_button.isOver(mouse_pos):
-                #     again_button.color = (89, 66, 42)
-                # else:
-                #     again_button.color = (102, 61, 16)
 
                 if info_button.isOver(mouse_pos):
                     info_button.color = (89, 66, 42)

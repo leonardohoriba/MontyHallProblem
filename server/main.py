@@ -61,7 +61,7 @@ class Server():
     conexoes = {}
     mensagens = []
     
-    SERVER_IP = '192.168.42.115'
+    SERVER_IP = "127.0.3.4"
     PORT = 5050
     ADDR = (SERVER_IP, PORT)
     FORMATO = 'utf-8'
