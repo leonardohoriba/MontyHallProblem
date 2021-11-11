@@ -118,14 +118,12 @@ class Client():
     def __init__(self):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client.connect(self.ADDR)
-    
-
 
     def jogar(self,mensagem):
         self.client.send(str(mensagem).encode(self.FORMATO))
         msg = None
         while msg is None:
-            msg = self.client.recv(1024).decode()
+            msg = self.client.recv(127).decode()
         return msg
 
 def main():

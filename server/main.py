@@ -2,7 +2,7 @@ import socket
 import time
 from random import randrange
 
-
+#### Lógica do Jogo
 class game():
     doors=[0,1,2]
     retorno = None
@@ -58,14 +58,12 @@ class game():
 
 
 class Server():
-    conexoes = {}
-    mensagens = []
-    
+   
     SERVER_IP = "127.0.3.4"
     PORT = 5050
     ADDR = (SERVER_IP, PORT)
     FORMATO = 'utf-8'
-    #socket do tipo TCP socket.SOCK_STREAM
+    #Socket do tipo TCP socket.SOCK_STREAM
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.bind(ADDR)
     conn,addr=False,False
@@ -85,7 +83,7 @@ class Server():
         print(f'[NOVA CONEXÃO] Endereço: {addr}')
         self.nome = False
         while(self.run ==True):
-            msg= conn.recv(1024).decode()
+            msg= conn.recv(54).decode()
             if(msg):
                 if(msg=='exit'):
                     print('[ENCERRANDO CONEXÃO DO SOCKET]')
