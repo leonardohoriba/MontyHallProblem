@@ -8,7 +8,7 @@ import time
 import ast
 import json
 pygame.font.init()
-
+#testeradio2
 # **== CONSTANTS ==**
 WIDTH, HEIGHT, MARGIN_LEFT, MARGIN_RIGHT = 900, 600, 80, 80
 BACKGROUND_COLOR = (66, 66, 66)
